@@ -1,0 +1,56 @@
+package iq.teacher.schoolrecord.domain.engine
+
+/**
+ * Iraqi Art Education Intermediate School Grading Engine
+ * Implements official ministerial formulas for 2026–2027 and 2025–2026.
+ * Specifically for: الأستاذ علي الهنيدي - ثانوية الديوانية للمتميزين
+ */
+object IraqiGradingEngine {
+
+    /**
+     * Calculates Monthly Average: (Oral + Written Exam) / 2
+     * Returns null if either component is missing to avoid penalizing student prematurely.
+     */
+    fun calculateMonthlyAverage(oral: Double?, exam: Double?): Double? {
+        if (oral == null || exam == null) return null
+        return (oral + exam) / 2.0
+    }
+
+    /**
+     * Calculates Semester Pursuit: (Month 1 Average + Month 2 Average) / 2
+     */
+    fun calculateSemesterPursuit(month1Avg: Double?, month2Avg: Double?): Double? {
+        if (month1Avg == null || month2Avg == null) return null
+        return (month1Avg + month2Avg) / 2.0
+    }
+
+    /**
+     * Calculates Annual Pursuit for non-final intermediate school classes (الصفين الأول والثاني المتوسط):
+     * Annual Pursuit = (First-Semester Pursuit + Second-Semester Pursuit + Midyear Examination) / 3
+     */
+    fun calculateAnnualPursuit(
+        sem1Pursuit: Double?,
+        sem2Pursuit: Double?,
+        midYearExam: Double?
+    ): Double? {
+        if (sem1Pursuit == null || sem2Pursuit == null || midYearExam == null) return null
+        return (sem1Pursuit + sem2Pursuit + midYearExam) / 3.0
+    }
+
+    /**
+     * Calculates Final Grade for applicable non-final subject examinations:
+     * Final Grade = (Annual Pursuit + Final Examination) / 2
+     */
+    fun calculateFinalGrade(annualPursuit: Double?, finalExam: Double?): Double? {
+        if (annualPursuit == null || finalExam == null) return null
+        return (annualPursuit + finalExam) / 2.0
+    }
+
+    /**
+     * Determines passing status (Min passing grade is 50 for Iraqi schools).
+     */
+    fun isPassing(grade: Double?, minPassingGrade: Double = 50.0): Boolean {
+        if (grade == null) return false
+        return grade >= minPassingGrade
+    }
+}
